@@ -31,12 +31,18 @@ export function Lesson(props: LessonProps) {
         {AvailableDateFormatted}
       </span>
       <div
-        // className={`rounded border border-gray-500 p-4 mt-2 group-hover:border-green-500 transition-colors ${isActiveLesson ? 'bg-green-500' : ''}`}>
         className={classNames(
-          'rounded border border-gray-500 p-4 mt-2 group-hover:border-green-500 transition-colors', {
+          'relative rounded border border-gray-500 p-4 mt-2 group-hover:border-green-500 transition-colors', {
           'bg-green-500': isActiveLesson,
         }
         )}>
+
+
+        <div className={classNames('absolute left-0 top-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-4 h-4 bg-green-500', {
+          'block': isActiveLesson,
+          'hidden': !isActiveLesson
+        })}></div>
+
         <header className="flex items-center justify-between">
           {
             isLessonAvailable ?

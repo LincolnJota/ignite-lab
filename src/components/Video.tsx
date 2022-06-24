@@ -1,38 +1,9 @@
 import { CaretRight, DiscordLogo, FileArrowDown, Image, Lightning } from "phosphor-react";
 import { DefaultUi, Player, Youtube } from "@vime/react";
-import { gql, useQuery } from "@apollo/client";
 
 
 import '@vime/core/themes/default.css'
-
-const QUERY_LESSON_BY_SLUG = gql`
-    query ($slug: String) {
-    lesson(where: {slug: $slug}) {
-      title
-      videoId
-      description
-      teacher {
-        avatarURL
-        bio
-        name
-      }
-    }
-  }
-    `;
-
-
-interface getLessonBySlugResponse {
-  lesson: {
-    title: string;
-    videoId: string;
-    description: string;
-    teacher: {
-      bio: string;
-      avatarURL: string;
-      name: string;
-    }
-  }
-}
+import { useGetLessonBySlugQuery } from "../graphql/generated";
 
 
 interface VideoParams {
@@ -43,16 +14,16 @@ interface VideoParams {
 
 export function Video(props: VideoParams) {
 
-  const { data } = useQuery<getLessonBySlugResponse>(QUERY_LESSON_BY_SLUG,
-    {
-      variables: {
-        slug: props.lessonSlug
-      },
-      fetchPolicy: 'no-cache'
-    });
+  const { data } = useGetLessonBySlugQuery({ variables: { slug: props.lessonSlug }, fetchPolicy: "no-cache" });
+  // {
+  //   variables: {
+  //     slug: props.lessonSlug
+  //   },
+  //   fetchPolicy: 'no-cache'
+  // });
 
   console.log(data);
-  if (!data) {
+  if (!data || !data.lesson) {
     return (
       <div className="flex-1">
         <p>Carregando...
@@ -62,7 +33,7 @@ export function Video(props: VideoParams) {
 
 
   return (
-    <div className="flex-1 ">
+    <div className="flex-1">
       <div className="bg-black flex justify-center">
         <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
           <Player>
@@ -72,7 +43,7 @@ export function Video(props: VideoParams) {
           </Player>
         </div>
       </div>
-      <div className="p-8 max-w-[1100px] mx-auto ">
+      <div className="p-8 max-w-[1100px] mx-auto">
         <div
           className=
           " desktop:flex desktop:items-start desktop:gap-16 "
@@ -84,14 +55,19 @@ export function Video(props: VideoParams) {
             <p className="mt-4 text-gray-200 leading-relaxed">
               {data!.lesson.description}
             </p>
-            <div className="flex items-center gap-4 mt-6">
-              <img src={data!.lesson.teacher.avatarURL} alt="" className="h-16 w-16 rounded-full border-2 border-blue-500" />
 
-              <div className="leading-relaxed">
-                <strong className="font-bold mobile:text-lg desktop:text-2xl block">{data!.lesson.teacher.name}</strong>
-                <span className="text-gray-200 text-sm block">{data!.lesson.teacher.bio}</span>
+            {data.lesson.teacher && (
+              <div className="flex items-center gap-4 mt-6">
+                <img src={data.lesson.teacher.avatarURL} alt="" className="h-16 w-16 rounded-full border-2 border-blue-500" />
+
+                <div className="leading-relaxed">
+                  <strong className="font-bold mobile:text-lg desktop:text-2xl block">{data!.lesson.teacher.name}</strong>
+                  <span className="text-gray-200 text-sm block">{data!.lesson.teacher.bio}</span>
+                </div>
               </div>
-            </div>
+            )}
+
+
           </div>
           <div className="flex flex-col gap-4 mobile:pt-8 desktop:pt-0">
             <a href="#" className="p-4 text-sm bg-green-500 flex items-center rounded font-bold uppercase gap-2 justify-center hover:bg-green-700 transition-colors">
