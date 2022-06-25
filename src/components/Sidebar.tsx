@@ -8,8 +8,8 @@ export function Sidebar() {
 
   //className={"w-full flex-grow lg:flex lg:items-center lg:w-auto " + (true ? 'block' : 'hidden')}
 
-  return (                                      // w-[348px]
-    <aside className={"overflow-auto h-[1100px] w-[358px] bg-gray-700 p-6 border-l border-gray-600 mobile:hidden desktop:block laptop:hidden"}>
+  return (                                            // w-[358px]
+    <aside style={{ scrollbarGutter: 'auto' }} className={"scrollbar-none overflow-y-scroll h-[1200px] w-[358px] bg-gray-700 p-6 border-l border-gray-600 mobile:hidden desktop:block laptop:hidden"}>
       <span className="font-bold text-2xl pb-6 mb-6 border-b border-gray-500 block">
         Cronograma de Aulas
       </span>

@@ -26,14 +26,17 @@ export function Lesson(props: LessonProps) {
   const isActiveLesson = slug === props.slug;
 
   return (
-    <Link to={`/event/lesson/${props.slug}`} className='group'>
+    <Link to={!isLessonAvailable ? '#' : `/event/lesson/${props.slug}`} className='group'>
       <span className="text-gray-300">
         {AvailableDateFormatted}
       </span>
       <div
         className={classNames(
-          'relative rounded border border-gray-500 p-4 mt-2 group-hover:border-green-500 transition-colors', {
+          'relative rounded border border-gray-500 p-4 mt-2 transition-colors', {
+          'group-hover:border-green-500': isLessonAvailable,
           'bg-green-500': isActiveLesson,
+          'cursor-not-allowed': !isLessonAvailable,
+          'backdrop-grayscale-0 bg-white/20': !isLessonAvailable
         }
         )}>
 
@@ -61,7 +64,9 @@ export function Lesson(props: LessonProps) {
               )}
           <span className={classNames("text-xs rounded border text-white py-[0.125rem] px-2 font-bold", {
             'border-white': isActiveLesson,
-            'border-green-300': !isActiveLesson
+            'border-green-300': !isActiveLesson && isLessonAvailable,
+            'border-gray-300': !isLessonAvailable,
+
           })}>
             {
               props.type === 'live' ? 'AO VIVO' : 'AULA PRÁTICA'
@@ -70,7 +75,8 @@ export function Lesson(props: LessonProps) {
         </header>
         <strong className={classNames(" mt-5 block", {
           'text-white': isActiveLesson,
-          'text-gray-200': !isActiveLesson
+          'text-gray-200': !isActiveLesson,
+          'border-gray-300': !isLessonAvailable,
         })}>
           {props.title}
         </strong>

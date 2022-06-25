@@ -18,6 +18,7 @@ module.exports = {
       // => @media (min-width: 1280px) { ... }
     },
     extend: {
+
       backgroundImage: {
         blur: 'url(/src/assets/blur-background.png)'
       },
@@ -51,5 +52,7 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar')
+  ],
 }
